@@ -33,6 +33,15 @@ const UserSchema = new Schema({
         type:Boolean,
         default:false,
     },
+    hasLeader:{
+        type:Boolean,
+        default:false,
+    },
+    leader:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+    }
+}, {timestamps:true})
 
-    
-})
+const User = mongoose.model("User", UserSchema);
+export default User;
