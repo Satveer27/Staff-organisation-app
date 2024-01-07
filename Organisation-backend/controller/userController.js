@@ -2,6 +2,9 @@ import User from "../model/User.js";
 import bcrypt from "bcryptjs";
 import asyncHandler from 'express-async-handler';
 import generateToken from '../utils/generateToken.js';
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // @description Register users
 // @route       Post /api/v1/users/register
@@ -72,132 +75,75 @@ export const getAllUserController = asyncHandler(async(req,res)=>{
 // @route       PUT /api/v1/users/:id/update
 // @access      Private/Admin
 export const updateUserController = asyncHandler(async(req,res)=>{
-    const organisationMembers = req.body.organisationMembers;
-    const isLeader = req.body.isLeader;
-    const isAdmin = req.body.isAdmin;
-    const username = req.body.username;
+    const {zone, username, email, isAdmin, description} = req.body;
+    const convertedImages = req.file.path;
+    const findEmail = await User.findOne({email});
+    if(findEmail){
+        throw new Error("email already exist");
+    }
     
-    //loop thru the management list
-    let orgmembers = []
-    const updatedUser = await User.findById(req.params.id);
-    if(organisationMembers){
-        for(let i=0; i<organisationMembers.length; i++){
-            const checkUser = await User.findOne({email: organisationMembers[i]})
-            if(!checkUser){
-                throw new Error("Sorry but this user does not exist");
-            }
-            if(checkUser.email === updatedUser.email){
-                throw new Error("You cant use same user to add as a organisation member");
-            }
-            if(updatedUser.hasLeader === true){
-                const checkerUser = await User.findById(updatedUser.leader);
-                if(checkUser.email === checkerUser.email){
-                    throw new Error("You cant use the leader as organisation member");
-                }
-            }
-            
-            orgmembers.push(checkUser);
-        }
-
-        if(updatedUser.organisationMember.length!=0){
-        for(let i=0; i<updatedUser.organisationMember.length ; i++){
-            const updateUserLeader = await User.findByIdAndUpdate(updatedUser.organisationMember[i], {
-                hasLeader:false,
-                leader: null,
-            }, 
-                {new:true});
-        }
-        }
-
-        for(let i=0; i<orgmembers.length;i++){
-            const updateUserLeader = await User.findByIdAndUpdate(orgmembers[i], {
-                hasLeader:true,
-                leader: req.params.id,
-
-            }, {new:true});
-        }
-
-        //update the user
-        const updateUserNow = await User.findByIdAndUpdate(req.params.id, {
-            organisationMember: orgmembers,
-            isAdmin,
-            username,
-            isLeader,
-        },{
-            new: true,
-        });
-    }
-    else{
-    //update the user
-        const updateUserNow = await User.findByIdAndUpdate(req.params.id, {
-            isAdmin,
-            username,
-            isLeader,
-        },{
-            new: true,
-        });
-    }
-
-
-    //check if user got org chart
-    const checkTheUpdatedUser = await User.findById(req.params.id)
-    if(checkTheUpdatedUser.organisationMember.length!=0){
-        await User.findByIdAndUpdate(req.params.id,{
-            hasOrganisationChart:true,
-        },{
-            new:true
-        })
-    }
-    else{
-        await User.findByIdAndUpdate(req.params.id,{
-            hasOrganisationChart:false,
-        },{
-            new:true
-        })
-    }
-
     //print the final user
-    const user = await User.findById(req.params.id);
+    const user = await User.findByIdAndUpdate(req.params.id, {
+        profileImage : convertedImages,
+        zone, 
+        username,
+        email,
+        isAdmin,
+        description,
+    },
+    {runValidators: true, returnOriginal: false, useFindAndModify: false},
+    {new:true});
 
-    res.json({
-        status:"success",
-        msg: "Users:",
-        user,
-    })
-})
-
-// @description get organisation chart for leader
-// @route       GET /api/v1/users/orgchart/leader
-// @access      Public
-export const getLeaderOrgChart = asyncHandler(async(req,res)=>{
-    const users = await User.find({
-        isLeader:true
-    })
-    const userMembers = users[0].organisationMember;
-    
-    res.json({
-        status:"success",
-        msg: "Users:",
-        userMembers,
-    })
-})
-
-// @description get organisation chart for other employees 
-// @route       GET /api/v1/users/orgchart/:id
-// @access      Public
-export const getOrgChartEmployee = asyncHandler(async(req,res)=>{
-    const users = await User.findById(
-        req.params.id
-    )
-    if(!users.hasOrganisationChart){
-        throw new Error("User has no org chart");
+    //update hasProfileImage
+    if(user.profileImage != undefined){
+        await User.findByIdAndUpdate(req.params.id,{
+            hasProfileImage:true
+        },{new:true})
     }
-    const userMembers = users.organisationMember;
-    
+    else{
+        await User.findByIdAndUpdate(req.params.id,{
+            hasProfileImage:false
+        },{new:true})
+    }
+    const updatedUser = await User.findById(req.params.id);
     res.json({
         status:"success",
         msg: "Users:",
-        userMembers,
+        updatedUser,
+    })
+})
+
+// @description get employee by zone 
+// @route       GET /api/v1/zones
+// @access      Public
+export const getUserByZone = asyncHandler(async(req,res)=>{
+    const zone1 = await User.find({
+        hasProfileImage: true,
+        zone: "zone1",
+    })
+
+    const zone2 = await User.find({
+        hasProfileImage: true,
+        zone: "zone2",
+    })
+
+    const zone3 = await User.find({
+        hasProfileImage: true,
+        zone: "zone3",
+    })
+
+    const zone4 = await User.find({
+        hasProfileImage: true,
+        zone: "zone4",
+    })
+    
+    res.json({
+        status:"success",
+        msg: "zones:",
+        zone1,
+        zone2,
+        zone3,
+        zone4,
     })
 })
 

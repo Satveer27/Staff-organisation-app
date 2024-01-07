@@ -19,28 +19,22 @@ const UserSchema = new Schema({
         type: Boolean,
         default: false,
     },
-    hasOrganisationChart:{
+    zone:{
+        type:String,
+        default:'nozone',
+        enum:['zone1', 'zone2', 'zone3', 'zone4', 'nozone'],
+    },
+    description:{
+        type:String,
+    },
+    profileImage:{
+        type:String,
+    },
+    hasProfileImage:{
         type:Boolean,
         default:false,
-    },
-    organisationMember:[
-        {
-            type:mongoose.Schema.Types.ObjectId,
-            ref:"User",
-        }
-    ],
-    isLeader:{
-        type:Boolean,
-        default:false,
-    },
-    hasLeader:{
-        type:Boolean,
-        default:false,
-    },
-    leader:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"User",
     }
+    
 }, {timestamps:true})
 
 const User = mongoose.model("User", UserSchema);
