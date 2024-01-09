@@ -1,10 +1,11 @@
 import React from 'react'
+import HeroSection from '../../components/HeroSection';
 
 function Home() {
   return (
-    <div>
-      Home
-    </div>
+    <main className='bg-[#121212] flex flex-col min-h-screen'>
+      <HeroSection/>
+    </main>
   )
 }
 

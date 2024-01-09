@@ -1,3 +1,68 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.glowing-circle {
+    position: absolute;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background-color: #2ecc71; /* Green color */
+    box-shadow: 0 0 20px #2ecc71, 0 0 40px #2ecc71, 0 0 60px #2ecc71;
+    animation: glow 1.5s infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black; /* White text */
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+@keyframes glow {
+    0%, 100% {
+      box-shadow: 0 0 20px #2ecc71, 0 0 40px #2ecc71, 0 0 60px #2ecc71;
+      transform: translateY(0);
+    }
+    50% {
+      box-shadow: 0 0 20px #2ecc71, 0 0 40px #2ecc71, 0 0 80px #2ecc71;
+      transform: translateY(-10px);
+    }
+}
+
+.button-border{
+    position: relative;
+    background: #fff;
+    color: #fff;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    font-size: 1.5em;
+    font-weight: 400;
+    padding: 15px 20px;
+    transition: 0.5s;
+}
+
+.button-border:hover{
+    background: #03e9f4;
+    color:#03e9f4;
+    letter-spacing: 0.2em;
+    box-shadow: 0 0 35px #03e9f4,
+                0 0 40px #03e9f4,
+                0 0 50px #03e9f4,
+                0 0 200px #03e9f4
+}
+
+.button-border::before{
+    content:'';
+    position: absolute;
+    inset:2px;
+    background: #121212;
+}
+
+.button-border span{
+    position: relative;
+    z-index: 1;
+}
+
+
+
+

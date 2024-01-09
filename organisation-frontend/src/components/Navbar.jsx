@@ -7,7 +7,7 @@ function Navbar() {
   const[navbarOpen, setNavbarOpen]= useState(false)
   return (
     <header className='sticky z-50 top-0'>
-    <nav className='bg-[#121212] bg-opacity-90'>
+    <nav className='bg-[#121212]'>
       <div className='flex flex-wrap items-center justify-between mx-auto p-6 py-3'>
         <Link to="/" className='text-3xl md:text-4xl text-white font-semibold'>LOGO</Link>
         <div className='mobile-menu block md:hidden'>
