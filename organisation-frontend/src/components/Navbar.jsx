@@ -27,7 +27,7 @@ function Navbar() {
           <ul className='flex p-4 md:p-0 md:flex-row md:space-x-8 mt-0'>
             <li><Link to="/login" className='block py-2 pl-3 pr-4 text-[#ADB7BE] sm:text-xl rounded md:p-0 hover:text-white'>Staff</Link></li>
             <li><Link to="/login" className='block py-2 pl-3 pr-4 text-[#ADB7BE] sm:text-xl rounded md:p-0 hover:text-white'>About</Link></li>
-            <li><Link to="/login" className='block py-2 pl-3 pr-4 text-[#ADB7BE] sm:text-xl rounded md:p-0 hover:text-white'>Contact</Link></li>
+            <li><Link to="/contact" className='block py-2 pl-3 pr-4 text-[#ADB7BE] sm:text-xl rounded md:p-0 hover:text-white'>Contact</Link></li>
           </ul>
         </div>
       </div>

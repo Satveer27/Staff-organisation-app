@@ -63,6 +63,155 @@
     z-index: 1;
 }
 
+.blob{
+  background-image: url("../src/images/about-us-image1.png");
+  width: 200px;
+  height: 200px;
+  background-size: cover;
+  background-position: center center;
+  margin: 20px;
+  box-shadow: 0 0 20px #FFAC1C, 0 0 40px #2ecc71, 0 0 80px #2ecc71;
+  animation: animate 5s ease-in-out infinite;
+  transition: all 1s ease-in-out;
+}
+
+.blob2{
+  background-image: url("../src/images/about-us-image3.png");
+  width: 235px;
+  height: 235px;
+  background-size: cover;
+  background-position: center center;
+  margin: 20px;
+  box-shadow: 0 0 20px #03e9f4, 0 0 40px #03e9f4, 0 0 80px #2ecc71;
+  animation: animate 5s ease-in-out infinite;
+  transition: all 1s ease-in-out;
+}
+
+
+@keyframes animate{
+  0%, 100%{
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+  50%{
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+  }
+}
+
+.tags::before{
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  background-color: #e91e63;
+  height: 2px;
+  box-sizing: border-box;
+  width: 50px;
+}
+
+.ul-tag li{
+  margin-bottom: 10px;
+}
+
+.ul-tag li a{
+  font-size: 16px;
+  text-transform: capitalize;
+  color: #fff;
+  font-weight: 300;
+  text-decoration: none;
+  display: block;
+  color: #bbb;
+  transition: all 0.5s ease;
+}
+
+.ul-tag li a:hover{
+  color: #ffff;
+  padding-left: 10px;
+}
+
+.social-links a{
+  display: inline-block;
+  height: 40px;
+  width: 40px;
+  background-color: rgba(255,255,255,0.2);
+  margin:0 10px 10px 0;
+  text-align: center;
+  line-height: 40px;
+  border-radius: 50%;
+  color: #ffff;
+  transition: all 0.5s ease;
+}
+
+.social-links a:hover{
+  color: #24262b;
+  background-color: #ffffff;
+}
+
+section .star{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  animation: animateStar 8s ease-in-out infinite,
+              backgroundmove 16s linear infinite;
+
+
+}
+
+section .star.star1{
+  animation-delay: 0s;
+  background: url('../src/images/star1.png')
+}
+section .star.star2{
+  animation-delay: -1s;
+  background: url('../src/images/star2.png')
+}
+section .star.star3{
+  animation-delay: -2s;
+  background: url('../src/images/star3.png')
+}
+section .star.star4{
+  animation-delay: -3s;
+  background: url('../src/images/star4.png')
+}
+section .star.star5{
+  animation-delay: -4s;
+  background: url('../src/images/star5.png')
+}
+section .star.star6{
+  animation-delay: -5s;
+  background: url('../src/images/star6.png')
+}
+section .star.star7{
+  animation-delay: -6s;
+  background: url('../src/images/star7.png')
+}
+section .star.star8{
+  animation-delay: -7s;
+  background: url('../src/images/star8.png')
+}
+
+@keyframes animateStar {
+  0%,20%,40%,60%,80%,100%{
+    opacity: 0;
+  }
+  10%,30%,50%,70%,90%{
+    opacity: 1;
+  }
+}
+
+@keyframes backgroundmove {
+  0%{
+    transform: scale(1);
+  }100%{
+    transform: scale(2);
+  }
+}
+
+
+
+
 
 
 

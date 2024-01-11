@@ -1,6 +1,7 @@
 import React from 'react'
 import HeroSection from '../../components/HeroSection';
 import CardSection from '../../components/CardSection';
+import AboutUs from '../../components/AboutUs';
 
 function Home() {
   return (
@@ -8,6 +9,7 @@ function Home() {
       
         <HeroSection/>
         <CardSection/>
+        <AboutUs/>
       
     </main>
   )

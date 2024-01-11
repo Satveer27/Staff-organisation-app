@@ -1,13 +1,14 @@
 import React from 'react'
 import { Outlet } from 'react-router'
 import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 
 function Userlayout() {
   return (
     <>
       <Navbar/>
       <Outlet/>
-      <h1>Footer</h1>
+      <Footer/>
     </>
   )
 }

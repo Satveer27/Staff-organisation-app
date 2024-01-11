@@ -5,6 +5,7 @@ import Home from "../src/pages/user/Home";
 import Login from "./pages/admin/Login";
 import Adminlayout from './layout/AdminLayout';
 import Register from './pages/admin/Register';
+import Contact from './pages/user/Contact';
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Userlayout/>}>
             <Route path='' element={<Home/>}/>
+            <Route path='contact' element={<Contact/>}/>
           </Route>
           <Route path='/admin/' element={<Adminlayout/>}>
             <Route path='login' element={<Login/>}/>
