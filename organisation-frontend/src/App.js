@@ -6,7 +6,8 @@ import Login from "./pages/admin/Login";
 import Adminlayout from './layout/AdminLayout';
 import Register from './pages/admin/Register';
 import Contact from './pages/user/Contact';
-
+import Dashboard from './pages/admin/Dashboard';
+import AdminRoute from './authRoute/AdminRoute';
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
           </Route>
           <Route path='/admin/' element={<Adminlayout/>}>
             <Route path='login' element={<Login/>}/>
-            <Route path='register' element={<Register/>}/>
+            <Route path='register' element={<AdminRoute><Register/></AdminRoute>}/>
+            <Route path='dashboard' element={<AdminRoute><Dashboard/></AdminRoute>}/>
           </Route>
         </Routes>
       </BrowserRouter>

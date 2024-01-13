@@ -157,11 +157,13 @@ section .star{
               backgroundmove 16s linear infinite;
 
 
+
 }
 
 section .star.star1{
   animation-delay: 0s;
   background: url('../src/images/star1.png')
+  
 }
 section .star.star2{
   animation-delay: -1s;
@@ -209,7 +211,15 @@ section .star.star8{
   }
 }
 
-
+.star-container{
+  background: rgba(22, 110, 234, 0.1);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 1);
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
+  
+ 
+}
 
 
 

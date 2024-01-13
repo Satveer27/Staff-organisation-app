@@ -1,24 +1,39 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
-import {UserIcon} from "@heroicons/react/24/solid"
+import { useState } from 'react'
+import {UserIcon} from "@heroicons/react/24/solid";
+import { useDispatch, useSelector } from "react-redux";
+import { loginAction } from '../../redux/slices/users/userSlice';
+import ErrorMsg from '../../errorMessage/ErrorMessage';
 
 
 function Login() {
+  const dispatch = useDispatch();
   const [formData , setFormData] = useState({
-    name:'',
     email:'',
     password:'',
-    password2:'',
   })
 
   const{email, password} = formData
   
-  const onChange = ()=>{
-
+  const onChange = (e)=>{
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   }
 
   const onSubmit = (e) =>{
+    console.log(email,password);
     e.preventDefault();
+    dispatch(loginAction({email,password}));
+  }
+
+  //select store data
+  const{error, loading, userInfo} = useSelector((state)=>state?.users?.userAuth);
+  console.log(error, loading, userInfo);
+
+  //redirect
+  if(userInfo?.userFound?.isAdmin){
+    window.location.href = '/admin/dashboard';
+  }else if(userInfo?.userFound){
+    window.location.href = '/'
   }
 
   return (
@@ -35,11 +50,16 @@ function Login() {
       </section>
 
       <section className='mt-10'>
+        {/* errr */}
+        {error && <ErrorMsg message={error?.message}/>}
         <form onSubmit={onSubmit}>
         <div className='flex items-center justify-center flex-col lg:px-[400px] px-4 mb-14 '>
-          <input type="text" className="placeholder:text-gray-500 w-full mb-4 px-12 py-6 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='name' name="name" value={email} placeholder='Enter your email' onChange={onChange}/>
-          <input type="text" className="placeholder:text-gray-500 w-full mb-4 px-12 py-6 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='name' name="name" value={password} placeholder='Enter your password' onChange={onChange}/>
+          <input type="email" className="placeholder:text-gray-500 w-full mb-4 px-12 py-6 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id="email" name="email" value={email} placeholder='Enter your email' onChange={onChange}/>
+          <input type="password" className="placeholder:text-gray-500 w-full mb-4 px-12 py-6 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" name="password" id="password" value={password} placeholder='Enter your password' onChange={onChange}/>
+          { loading ? 
+          <button disabled className="mt-5 md:mt-8 bg-gray-800 text-white font-bold font-heading py-5 px-16 rounded-md">loading</button>:
           <button type="submit" className="mt-5 md:mt-8 bg-blue-800 hover:bg-blue-900 text-white font-bold font-heading py-5 px-16 rounded-md">submit</button>
+          }
         </div>
         </form>
         
