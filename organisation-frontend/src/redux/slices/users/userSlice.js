@@ -1,4 +1,4 @@
-import {createAsyncThunk, createAction, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios from "axios";
 import baseURL from "../../../config/baseurl";
 import { resetErrAction } from "../globalActions/globalAction";
@@ -44,31 +44,49 @@ export const loginAction = createAsyncThunk('users/login', async({email,password
 //register action
 //login action
 export const registerAction = createAsyncThunk('users/register', async(payload, {rejectWithValue, getState, dispatch})=>{
+
     try{
         const {email,
             password,
             username, 
-            zone,
+            zonesChecker,
             description,
-            isAdmin,} = payload;
-
+            boolAdmin,
+            file,
+            } = payload;
+        
+        console.log(email,
+            password,
+            username, 
+            zonesChecker,
+            description,
+            boolAdmin,
+            file,);
         //token
         const token = getState()?.users?.userAuth?.userInfo?.token;
         const config = {
             headers:{
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
             }
         }
 
+        //FormData
+        const formData = new FormData();
+        formData.append("username", username);
+        formData.append("description", description);
+        formData.append("password", password);
+        formData.append("isAdmin", boolAdmin);
+        formData.append("zone", zonesChecker);
+        formData.append("email", email);
+
+        file.forEach((file) => {
+            formData.append("file", file);
+        });
+
+        
         //make http req
-        const response = await axios.post(`${baseURL}/users/register`, {
-            email,
-            password,
-            username, 
-            zone,
-            description,
-            isAdmin,
-        }, config)
+        const response = await axios.post(`${baseURL}/users/register`, formData, config)
 
         //save token to local storage
         localStorage.setItem('userInfo', JSON.stringify(response.data));

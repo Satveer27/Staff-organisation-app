@@ -20,14 +20,13 @@ function Login() {
   }
 
   const onSubmit = (e) =>{
-    console.log(email,password);
     e.preventDefault();
     dispatch(loginAction({email,password}));
   }
 
   //select store data
   const{error, loading, userInfo} = useSelector((state)=>state?.users?.userAuth);
-  console.log(error, loading, userInfo);
+
 
   //redirect
   if(userInfo?.userFound?.isAdmin){
@@ -35,7 +34,7 @@ function Login() {
   }else if(userInfo?.userFound){
     window.location.href = '/'
   }
-
+  
   return (
     <>
       <section>

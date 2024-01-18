@@ -11,9 +11,21 @@ const animatedComponents = makeAnimated();
 function Register() {
   const dispatch = useDispatch();
   
+  //files
+  const[file, setFiles]=useState();
+  const[fileError, setFileError] = useState([]);
+
+  const fileHandleChange = (event)=>{
+    console.log(event);
+    const newFiles = Array.from(event?.target?.files);
+    setFiles(newFiles)
+  }
+
   //zones
   const zone = ['zone1','zone2','zone3','zone4','nozone'];
-  const [zoneOption, setZoneOption] = useState([]);
+  const isAdmin = ['true', 'false'];
+  const [zoneOption, setZoneOption] = useState();
+  const [adminOption, setAdmin] = useState();
 
   const{error, loading} = useSelector((state)=>state?.users);
 
@@ -24,21 +36,29 @@ function Register() {
     }
   })
 
+  const adminOptionsConverted = isAdmin?.map(isAdmin=>{
+    return{
+      value:isAdmin,
+      label:isAdmin,
+    }
+  })
+
   //create handle change
-  const handeZoneChange = (zone) =>{
+  const handelZoneChange = (zone) =>{
     setZoneOption(zone);
+  }
+
+  const handelAdminChange = (isAdmin) =>{
+    setAdmin(isAdmin);
   }
 
   const [formData , setFormData] = useState({
     username:'',
     email:'',
     password:'',
-    zone:'',
     description:'',
-    images:'',
   })
 
-  const{username, email, password, description} = formData
   
   const onChange = (e)=>{
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -46,7 +66,20 @@ function Register() {
 
   const onSubmit = (e) =>{
     e.preventDefault();
-    dispatch(registerAction(formData))
+    let boolAdmin = false;
+    if (adminOption?.label === 'true'){
+      boolAdmin = true;
+      
+    }else{
+      boolAdmin = false;
+      
+    }
+    console.log(boolAdmin);
+    console.log(adminOption?.label);
+    let zonesChecker = zoneOption?.label
+    dispatch(registerAction({
+      ...formData, file, boolAdmin, zonesChecker,
+    }));
   }
 
   return (
@@ -69,28 +102,43 @@ function Register() {
           <label className="block text-sm font-medium text-gray-700">
                   username
           </label>
-          <input type="text" className="placeholder:text-gray-500 w-full mb-4 px-12 py-5 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='username' name="username" value={username} placeholder='Enter your name' onChange={onChange}/>
+          <input type="text" className="placeholder:text-gray-500 w-full mb-4 px-12 py-5 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='username' name="username" value={formData?.username} placeholder='Enter your name' onChange={onChange}/>
           <label className="block text-sm font-medium text-gray-700">
                   email
           </label>
-          <input type="text" className="placeholder:text-gray-500 w-full mb-4 px-12 py-5 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='email' name="email" value={email} placeholder='Enter your email' onChange={onChange}/>
+          <input type="text" className="placeholder:text-gray-500 w-full mb-4 px-12 py-5 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='email' name="email" value={formData?.email} placeholder='Enter your email' onChange={onChange}/>
           <label className="block text-sm font-medium text-gray-700">
                   password
           </label>
-          <input type="text" className="placeholder:text-gray-500 w-full mb-4 px-12 py-5 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='password' name="password" value={password} placeholder='Enter your password' onChange={onChange}/>
+          <input type="text" className="placeholder:text-gray-500 w-full mb-4 px-12 py-5 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='password' name="password" value={formData?.password} placeholder='Enter your password' onChange={onChange}/>
           <label className="block text-sm font-medium text-gray-700">
                   zone
           </label>
           <Select
                   components={animatedComponents}
                   name="zone"
+                  value={formData.zone}
                   options={zoneOptionsCoverted}
                   className='w-full mb-4 px-12 py-5'
                   isClearable={true}
                   isLoading={false}
                   isSearchable={true}
                   closeMenuOnSelect={false}
-                  onChange={(item) => handeZoneChange(item)}
+                  onChange={(item) => handelZoneChange(item)}
+          />
+          <label className="block text-sm font-medium text-gray-700">
+                  is a Admin
+          </label>
+          <Select
+                  components={animatedComponents}
+                  name="isAdmin"
+                  options={adminOptionsConverted}
+                  className='w-full mb-4 px-12 py-5'
+                  isClearable={true}
+                  isLoading={false}
+                  isSearchable={true}
+                  closeMenuOnSelect={false}
+                  onChange={(item) => handelAdminChange(item)}
           />
           <label className="block text-sm font-medium text-gray-700">
                   description
@@ -98,7 +146,7 @@ function Register() {
           <textarea
                     rows={4}
                     name="description"
-                    value={description}
+                    value={formData?.description}
                     onChange={onChange}
                     placeholder='Enter user description'
                     className="placeholder:text-gray-500 block w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm mb-4 px-12 py-5"
@@ -128,9 +176,7 @@ function Register() {
                           className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500">
                           <span>Upload user picture</span>
                           <input
-                            name="images"
-                            value={formData.images}
-                            onChange={onChange}
+                            onChange={fileHandleChange}
                             type="file"
                             className=''
                           />
