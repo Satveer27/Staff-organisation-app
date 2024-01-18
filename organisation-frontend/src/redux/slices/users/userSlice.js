@@ -14,10 +14,13 @@ const initialState = {
     error: null,
     users: [],
     user :{},
+    isAdded: false,
+    isUpdated: false,
+    isDeleted: false,
     userAuth:{
         loading:false,
         error:null,
-        userInfo:{},
+        userInfo: localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null,
     }
 }
 
@@ -38,12 +41,67 @@ export const loginAction = createAsyncThunk('users/login', async({email,password
     }
 })
 
+//register action
+//login action
+export const registerAction = createAsyncThunk('users/register', async(payload, {rejectWithValue, getState, dispatch})=>{
+    try{
+        const {email,
+            password,
+            username, 
+            zone,
+            description,
+            isAdmin,} = payload;
+
+        //token
+        const token = getState()?.users?.userAuth?.userInfo?.token;
+        const config = {
+            headers:{
+                Authorization: `Bearer ${token}`
+            }
+        }
+
+        //make http req
+        const response = await axios.post(`${baseURL}/users/register`, {
+            email,
+            password,
+            username, 
+            zone,
+            description,
+            isAdmin,
+        }, config)
+
+        //save token to local storage
+        localStorage.setItem('userInfo', JSON.stringify(response.data));
+        return response.data;
+    }catch(e){
+        console.log(e)
+        return rejectWithValue(e?.response?.data);
+    }
+})
+
 //users slice
 const usersSlice = createSlice({
     name:'users',
     initialState,
     extraReducers: (builder)=>{
         //handle actions
+
+        //register
+        builder.addCase(registerAction.pending, (state, action)=>{
+            state.loading = true;
+        });
+        builder.addCase(registerAction.fulfilled, (state, action)=>{
+            state.user = action.payload;
+            state.loading = false;
+            state.isAdded = true;
+        });
+        builder.addCase(registerAction.rejected, (state, action)=>{
+            state.error = action.payload;
+            state.loading = false;
+            state.user = null;
+            state.isAdded = false;
+        });
+
         //login
         builder.addCase(loginAction.pending, (state, action)=>{
             state.userAuth.loading = true;
@@ -56,10 +114,13 @@ const usersSlice = createSlice({
             state.userAuth.error = action.payload;
             state.userAuth.loading = false;
         });
+
+        //error handling
         builder.addCase(resetErrAction.pending, (state, action)=>{
             state.userAuth.error = null;
             state.error = null;
         });
+
         
     } 
 });

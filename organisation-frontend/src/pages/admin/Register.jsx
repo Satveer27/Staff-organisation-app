@@ -1,9 +1,34 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import {UserIcon} from "@heroicons/react/24/solid"
+import { useDispatch, useSelector } from "react-redux";
+import { registerAction } from '../../redux/slices/users/userSlice';
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 
+const animatedComponents = makeAnimated();
 
 function Register() {
+  const dispatch = useDispatch();
+  
+  //zones
+  const zone = ['zone1','zone2','zone3','zone4','nozone'];
+  const [zoneOption, setZoneOption] = useState([]);
+
+  const{error, loading} = useSelector((state)=>state?.users);
+
+  const zoneOptionsCoverted = zone?.map(zone=>{
+    return{
+      value:zone,
+      label:zone,
+    }
+  })
+
+  //create handle change
+  const handeZoneChange = (zone) =>{
+    setZoneOption(zone);
+  }
+
   const [formData , setFormData] = useState({
     username:'',
     email:'',
@@ -13,7 +38,7 @@ function Register() {
     images:'',
   })
 
-  const{username, email, password, zone, description} = formData
+  const{username, email, password, description} = formData
   
   const onChange = (e)=>{
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -21,6 +46,7 @@ function Register() {
 
   const onSubmit = (e) =>{
     e.preventDefault();
+    dispatch(registerAction(formData))
   }
 
   return (
@@ -40,11 +66,35 @@ function Register() {
       <section className='mt-10'>
         <form onSubmit={onSubmit}>
         <div className='flex items-center justify-center flex-col lg:px-[400px] px-4 mb-14'>
+          <label className="block text-sm font-medium text-gray-700">
+                  username
+          </label>
           <input type="text" className="placeholder:text-gray-500 w-full mb-4 px-12 py-5 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='username' name="username" value={username} placeholder='Enter your name' onChange={onChange}/>
+          <label className="block text-sm font-medium text-gray-700">
+                  email
+          </label>
           <input type="text" className="placeholder:text-gray-500 w-full mb-4 px-12 py-5 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='email' name="email" value={email} placeholder='Enter your email' onChange={onChange}/>
+          <label className="block text-sm font-medium text-gray-700">
+                  password
+          </label>
           <input type="text" className="placeholder:text-gray-500 w-full mb-4 px-12 py-5 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='password' name="password" value={password} placeholder='Enter your password' onChange={onChange}/>
-          <input type="text" className="placeholder:text-gray-500 w-full mb-4 px-12 py-5 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='zone' name="zone" value={zone} placeholder='Enter your zone' onChange={onChange}/>
-          
+          <label className="block text-sm font-medium text-gray-700">
+                  zone
+          </label>
+          <Select
+                  components={animatedComponents}
+                  name="zone"
+                  options={zoneOptionsCoverted}
+                  className='w-full mb-4 px-12 py-5'
+                  isClearable={true}
+                  isLoading={false}
+                  isSearchable={true}
+                  closeMenuOnSelect={false}
+                  onChange={(item) => handeZoneChange(item)}
+          />
+          <label className="block text-sm font-medium text-gray-700">
+                  description
+          </label>
           <textarea
                     rows={4}
                     name="description"
@@ -53,7 +103,9 @@ function Register() {
                     placeholder='Enter user description'
                     className="placeholder:text-gray-500 block w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm mb-4 px-12 py-5"
           />
-                        
+          <label className="block text-sm font-medium text-gray-700">
+                  user image
+          </label>            
           <div className="mt-1 sm:col-span-2 sm:mt-0 w-full mb-4 px-15 py-5">
                   <div className="flex w-full justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
                     <div className="space-y-1 text-center">
@@ -92,8 +144,9 @@ function Register() {
             </div>
            
 
-          
-          <button type="submit" className="mt-5 md:mt-8 bg-blue-800 hover:bg-blue-900 text-white font-bold font-heading py-5 px-16 rounded-md">submit</button>
+          { loading ?
+          <button type="submit" className="mt-5 md:mt-8 bg-blue-800 hover:bg-blue-900 text-white font-bold font-heading py-5 px-16 rounded-md">loading</button>:
+          <button type="submit" className="mt-5 md:mt-8 bg-blue-800 hover:bg-blue-900 text-white font-bold font-heading py-5 px-16 rounded-md">submit</button>}
         </div>
         </form>
         
