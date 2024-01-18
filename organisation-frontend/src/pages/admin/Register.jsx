@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerAction } from '../../redux/slices/users/userSlice';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import ErrorMsg from '../../errorMessage/ErrorMessage';
+import SuccessMsg from '../../successMessage/successMessage';
 
 const animatedComponents = makeAnimated();
 
@@ -18,7 +20,20 @@ function Register() {
   const fileHandleChange = (event)=>{
     console.log(event);
     const newFiles = Array.from(event?.target?.files);
-    setFiles(newFiles)
+
+    //validation
+    const newError = [];
+
+    newFiles.forEach(file=>{
+      if(file?.size > 3000000){
+        newError.push(`${file?.name} is too large`)
+      }
+      if (!file?.type?.startsWith('image/')){
+        newError.push(`${file.name} is not an image`)
+      }
+    })
+    setFiles(newFiles);
+    setFileError(newError);
   }
 
   //zones
@@ -27,7 +42,7 @@ function Register() {
   const [zoneOption, setZoneOption] = useState();
   const [adminOption, setAdmin] = useState();
 
-  const{error, loading} = useSelector((state)=>state?.users);
+  const{error, loading, isAdded} = useSelector((state)=>state?.users);
 
   const zoneOptionsCoverted = zone?.map(zone=>{
     return{
@@ -84,6 +99,9 @@ function Register() {
 
   return (
     <>
+      {error && <ErrorMsg message={error?.message} />}
+      {fileError.length>0 && <ErrorMsg message='file too large or upload an img'/>}
+      {isAdded && <SuccessMsg message="User Added Successfully" />}
       <section>
         <div className='flex items-center justify-center flex-col'>
         <div className='flex flex-row mb-5 mt-10'>
@@ -102,15 +120,15 @@ function Register() {
           <label className="block text-sm font-medium text-gray-700">
                   username
           </label>
-          <input type="text" className="placeholder:text-gray-500 w-full mb-4 px-12 py-5 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='username' name="username" value={formData?.username} placeholder='Enter your name' onChange={onChange}/>
+          <input required type="text" className="placeholder:text-gray-500 w-full mb-4 px-12 py-5 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='username' name="username" value={formData?.username} placeholder='Enter your name' onChange={onChange}/>
           <label className="block text-sm font-medium text-gray-700">
                   email
           </label>
-          <input type="text" className="placeholder:text-gray-500 w-full mb-4 px-12 py-5 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='email' name="email" value={formData?.email} placeholder='Enter your email' onChange={onChange}/>
+          <input required type="email" className="placeholder:text-gray-500 w-full mb-4 px-12 py-5 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='email' name="email" value={formData?.email} placeholder='Enter your email' onChange={onChange}/>
           <label className="block text-sm font-medium text-gray-700">
                   password
           </label>
-          <input type="text" className="placeholder:text-gray-500 w-full mb-4 px-12 py-5 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='password' name="password" value={formData?.password} placeholder='Enter your password' onChange={onChange}/>
+          <input required type="password" className="placeholder:text-gray-500 w-full mb-4 px-12 py-5 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='password' name="password" value={formData?.password} placeholder='Enter your password' onChange={onChange}/>
           <label className="block text-sm font-medium text-gray-700">
                   zone
           </label>
@@ -125,6 +143,7 @@ function Register() {
                   isSearchable={true}
                   closeMenuOnSelect={false}
                   onChange={(item) => handelZoneChange(item)}
+                  required
           />
           <label className="block text-sm font-medium text-gray-700">
                   is a Admin
@@ -139,6 +158,7 @@ function Register() {
                   isSearchable={true}
                   closeMenuOnSelect={false}
                   onChange={(item) => handelAdminChange(item)}
+                  required
           />
           <label className="block text-sm font-medium text-gray-700">
                   description
@@ -150,6 +170,7 @@ function Register() {
                     onChange={onChange}
                     placeholder='Enter user description'
                     className="placeholder:text-gray-500 block w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm mb-4 px-12 py-5"
+                    required
           />
           <label className="block text-sm font-medium text-gray-700">
                   user image
@@ -179,6 +200,7 @@ function Register() {
                             onChange={fileHandleChange}
                             type="file"
                             className=''
+                            required
                           />
                         </label>
                       </div>

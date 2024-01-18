@@ -1,7 +1,8 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios from "axios";
 import baseURL from "../../../config/baseurl";
-import { resetErrAction } from "../globalActions/globalAction";
+import { resetErrAction, resetSuccessAction } from "../globalActions/globalAction";
+
 //axios for http req
 
 //createAsyncThunk is for external server req
@@ -139,7 +140,11 @@ const usersSlice = createSlice({
             state.error = null;
         });
 
-        
+        //reset success
+        builder.addCase(resetSuccessAction.pending, (state, action)=>{
+            state.isAdded = false;
+        })
+
     } 
 });
 
