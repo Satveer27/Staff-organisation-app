@@ -43,7 +43,7 @@ export const loginAction = createAsyncThunk('users/login', async({email,password
 });
 
 //fetch action
-export const fetchAllUser = createAsyncThunk('users/list', async(payload, {rejectWithValue, getState, dispatch})=>{
+export const fetchAllUser = createAsyncThunk('users/fetch All', async(payload, {rejectWithValue, getState, dispatch})=>{
     try{
          //token
          const token = getState()?.users?.userAuth?.userInfo?.token;
@@ -108,10 +108,7 @@ export const registerAction = createAsyncThunk('users/register', async(payload, 
 
         
         //make http req
-        const response = await axios.post(`${baseURL}/users/register`, formData, config)
-
-        //save token to local storage
-        localStorage.setItem('userInfo', JSON.stringify(response.data));
+        const response = await axios.post(`${baseURL}/users/register`, formData, config);
         return response.data;
     }catch(e){
         console.log(e)
