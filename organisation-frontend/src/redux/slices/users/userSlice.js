@@ -40,6 +40,27 @@ export const loginAction = createAsyncThunk('users/login', async({email,password
         console.log(e)
         return rejectWithValue(e?.response?.data);
     }
+});
+
+//fetch action
+export const fetchAllUser = createAsyncThunk('users/list', async(payload, {rejectWithValue, getState, dispatch})=>{
+    try{
+         //token
+         const token = getState()?.users?.userAuth?.userInfo?.token;
+         const config = {
+             headers:{
+                 Authorization: `Bearer ${token}`, 
+             }
+         }
+
+        //make http req
+        const response = await axios.get(`${baseURL}/users/allUsers`, config);
+        return response.data;
+
+    }catch(e){
+        console.log(e)
+        return rejectWithValue(e?.response?.data);
+    }
 })
 
 //register action
@@ -104,6 +125,20 @@ const usersSlice = createSlice({
     initialState,
     extraReducers: (builder)=>{
         //handle actions
+
+        //fetch users
+        builder.addCase(fetchAllUser.pending, (state, action)=>{
+            state.loading = true;
+        });
+        builder.addCase(fetchAllUser.fulfilled, (state, action)=>{
+            state.users = action.payload;
+            state.loading = false;
+        });
+        builder.addCase(fetchAllUser.rejected, (state, action)=>{
+            state.error = action.payload;
+            state.loading = false;
+            state.users = null;
+        });
 
         //register
         builder.addCase(registerAction.pending, (state, action)=>{
