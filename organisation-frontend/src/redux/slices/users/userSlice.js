@@ -15,6 +15,7 @@ const initialState = {
     error: null,
     users: [],
     user :{},
+    zones:[],
     isAdded: false,
     isUpdated: false,
     isDeleted: false,
@@ -116,6 +117,20 @@ export const registerAction = createAsyncThunk('users/register', async(payload, 
     }
 })
 
+//fetch all zones
+export const getUserZonesAction = createAsyncThunk('users/fetch-zone', async(payload, {rejectWithValue, getState, dispatch})=>{
+    try{
+        //make http req
+        const response = await axios.get(`${baseURL}/users/zone`);
+        return response.data;
+
+    }catch(e){
+        console.log(e)
+        return rejectWithValue(e?.response?.data);
+    }
+})
+
+
 //users slice
 const usersSlice = createSlice({
     name:'users',
@@ -135,6 +150,20 @@ const usersSlice = createSlice({
             state.error = action.payload;
             state.loading = false;
             state.users = null;
+        });
+
+        //fetch users zone
+        builder.addCase(getUserZonesAction.pending, (state, action)=>{
+            state.loading = true;
+        });
+        builder.addCase(getUserZonesAction.fulfilled, (state, action)=>{
+            state.zones = action.payload;
+            state.loading = false;
+        });
+        builder.addCase(getUserZonesAction.rejected, (state, action)=>{
+            state.error = action.payload;
+            state.loading = false;
+            state.zones = null;
         });
 
         //register

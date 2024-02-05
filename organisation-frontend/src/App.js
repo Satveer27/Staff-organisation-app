@@ -8,7 +8,7 @@ import Register from './pages/admin/Register';
 import Contact from './pages/user/Contact';
 import Dashboard from './pages/admin/Dashboard';
 import AdminRoute from './authRoute/AdminRoute';
-
+import Staff from './pages/user/Staff';
 function App() {
   return (
     <>
@@ -17,6 +17,7 @@ function App() {
           <Route path='/' element={<Userlayout/>}>
             <Route path='' element={<Home/>}/>
             <Route path='contact' element={<Contact/>}/>
+            <Route path='staff' element={<Staff/>}/>
           </Route>
           <Route path='/admin/' element={<Adminlayout/>}>
             <Route path='login' element={<Login/>}/>
