@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import EmployeeCard from '../../components/EmployeeCard'
 import { useSelector, useDispatch } from 'react-redux';
 import {getUserZonesAction} from '../../redux/slices/users/userSlice';
+import LoadingComponent from '../../components/LoadingComponent';
 
 function Staff() {
 
@@ -10,13 +11,14 @@ function Staff() {
     dispatch(getUserZonesAction())
   },[dispatch]);
   
-  const {zones: usersZones} = useSelector((state) => state.users); 
+  const {zones: usersZones, loading, error} = useSelector((state) => state.users); 
   const { status, msg, ...zones } = usersZones;
   console.log()
   return (
-    
+
+
 <section className='relative bg-[#121212]'>
-    
+{loading ? (<section className='relative bg-[#121212] justify-center flex w-full h-[380px]'><LoadingComponent/></section>) :<>
     {Object.keys(zones).map((zoneKey, index) => (
       <section key={index} className="relative bg-[#121212]">
         <div className='text-center py-10'>
@@ -31,6 +33,10 @@ function Staff() {
         </div>
       </section>
     ))}
+
+
+</>}
+    
     
   </section>
   

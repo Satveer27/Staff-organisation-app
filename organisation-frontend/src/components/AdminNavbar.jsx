@@ -29,16 +29,16 @@ function AdminNavbar() {
         <div className='menu hidden md:block md:w-auto' id="navbar">
           <ul className='flex p-4 md:p-0 md:flex-row md:space-x-8 mt-0'>
             {isAdmin && 
-            <li><Link to="/admin/register" className='flex flex-row py-2 pl-3 pr-4 text-[#ADB7BE] sm:text-xl rounded md:p-0 hover:text-white'>
+            <li><Link to="/admin/dashboard" className='flex flex-row py-2 pl-3 pr-4 text-[#ADB7BE] sm:text-xl rounded md:p-0 hover:text-white'>
             dasboard
             </Link>
             </li>}
-            <li>
+            {!isAdmin && <li>
             <Link to="/admin/login" className='flex flex-row py-2 pl-3 pr-4 text-[#ADB7BE] sm:text-xl rounded md:p-0 hover:text-white'>
             <ArrowRightStartOnRectangleIcon className='h-7 w-10 pt-1'/>
             <h1>Login</h1>
             </Link>
-            </li>
+            </li>}
             {isAdmin && 
             <li><Link to="/admin/register" className='flex flex-row py-2 pl-3 pr-4 text-[#ADB7BE] sm:text-xl rounded md:p-0 hover:text-white'>
             <UserIcon className='h-7 w-10 pt-1'/>

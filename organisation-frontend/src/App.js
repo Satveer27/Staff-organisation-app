@@ -9,6 +9,7 @@ import Contact from './pages/user/Contact';
 import Dashboard from './pages/admin/Dashboard';
 import AdminRoute from './authRoute/AdminRoute';
 import Staff from './pages/user/Staff';
+import Project from './pages/user/Project';
 function App() {
   return (
     <>
@@ -18,6 +19,7 @@ function App() {
             <Route path='' element={<Home/>}/>
             <Route path='contact' element={<Contact/>}/>
             <Route path='staff' element={<Staff/>}/>
+            <Route path='project' element={<Project/>}/>
           </Route>
           <Route path='/admin/' element={<Adminlayout/>}>
             <Route path='login' element={<Login/>}/>

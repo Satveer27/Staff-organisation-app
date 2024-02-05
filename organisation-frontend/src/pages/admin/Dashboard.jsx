@@ -2,6 +2,7 @@ import React from 'react'
 import {useDispatch, useSelector} from 'react-redux';
 import { useEffect } from "react";
 import {fetchAllUser} from '../../redux/slices/users/userSlice';
+import LoadingComponent from '../../components/LoadingComponent';
 
 function Dashboard() {
   //dispatch
@@ -54,6 +55,7 @@ function Dashboard() {
                   </th>
                 </tr>
               </thead>
+              {loading ? <LoadingComponent/> :
               <tbody className="divide-y divide-gray-200 bg-white">
             {users?.users?.map((user) => (
               <tr key = {user?.email}>
@@ -82,6 +84,9 @@ function Dashboard() {
               </tr>
             ))}
           </tbody>
+              
+              }
+              
             </table>
       </div>
       
