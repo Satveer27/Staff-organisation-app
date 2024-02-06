@@ -32,11 +32,11 @@ function HeroSection() {
                     today and tommorow!
                 </p>
                 <div className='mt-20 mb-10'>
-                <Link to="/" className='button-border ml-4 text-white'>
+                <Link to="/contact" className='button-border ml-4 text-white'>
                 <span>Contact Us</span></Link>
 
-                <Link to="/" className='button-border ml-20 text-white'>
-                <span>Contact Us</span></Link>
+                <Link to="/project" className='button-border ml-20 text-white'>
+                <span>Projects</span></Link>
                 </div>
             </div>
 
