@@ -1,9 +1,9 @@
 import './App.css';
-import {BrowserRouter,Routes, Route} from "react-router-dom";
-import Userlayout from "../src/layout/Userlayout";
-import Home from "../src/pages/user/Home";
-import Login from "./pages/admin/Login";
-import Adminlayout from './layout/AdminLayout';
+import {BrowserRouter,Routes, Route} from 'react-router-dom';
+import Userlayout from '../src/layout/Userlayout';
+import Home from '../src/pages/user/Home';
+import Login from './pages/admin/Login';
+import Adminlayout from '../src/layout/AdminLayout';
 import Register from './pages/admin/Register';
 import Contact from './pages/user/Contact';
 import Dashboard from './pages/admin/Dashboard';
