@@ -31,11 +31,11 @@ function HeroSection() {
                     Your safety is our concern. How you manage electricty can affect your way of life 
                     today and tommorow!
                 </p>
-                <div className='mt-20 mb-10'>
-                <Link to="/contact" className='button-border ml-4 text-white'>
+                <div className='mt-20 mb-10 flex flex-col items-center sm:flex-row sm:justify-center'>
+                <Link to="/contact" className='button-border mb-4 sm:mb-0 sm:mr-4 text-white'>
                 <span>Contact Us</span></Link>
 
-                <Link to="/project" className='button-border ml-20 text-white'>
+                <Link to="/project" className='button-border text-white sm:ml-2'>
                 <span>Projects</span></Link>
                 </div>
             </div>

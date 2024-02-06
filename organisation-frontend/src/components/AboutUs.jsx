@@ -6,7 +6,7 @@ function AboutUs() {
     <div className='md:grid md:grid-cols-2 items-center gap-8 px-4 xl:gap-16 sm:py-16 xl:px-16'>
         <div className='lg:-ml-4 xl:ml-0 mb-0 sm:mb-0'>
             <div className='blob'></div>
-            <div className='ml-44 lg:ml-68 md:ml-56 xl:ml-80'>
+            <div className='ml-24 lg:ml-68 md:ml-56 xl:ml-80 '>
             <div className='blob2'></div>
             </div>
         </div>

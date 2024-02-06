@@ -29,6 +29,13 @@
     }
 }
 
+/* Hide glowing circles on small screens */
+@media (max-width: 500px) {
+  .glowing-circle {
+    display: none;
+  }
+}
+
 .button-border{
     position: relative;
     background: #fff;
@@ -87,6 +94,52 @@
   transition: all 1s ease-in-out;
 }
 
+@media (max-width: 500px) {
+  .blob {
+    width: 150px;
+    height: 150px;
+  }
+  .blob2 {
+    width: 150px;
+    height: 155px;
+  }
+  
+}
+
+@media (max-width: 769px) {
+  .blob2 {
+    margin-left: 20rem;
+  }
+  
+}
+
+@media (max-width: 685px) {
+  .blob2 {
+    margin-left: 13rem;
+  }
+  
+}
+
+@media (max-width: 578px) {
+  .blob2 {
+    margin-left: 11rem;
+  }
+  
+}
+
+@media (max-width: 540px) {
+  .blob2 {
+    margin-left: 8rem;
+  }
+  
+}
+
+@media (max-width: 400px) {
+  .blob2 {
+    margin-left: 4rem;
+  }
+  
+}
 
 @keyframes animate{
   0%, 100%{
