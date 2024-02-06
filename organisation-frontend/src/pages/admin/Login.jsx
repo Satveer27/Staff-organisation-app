@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import {UserIcon} from "@heroicons/react/24/solid";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,14 +26,13 @@ function Login() {
 
   //select store data
   const{error, loading, userInfo} = useSelector((state)=>state?.users?.userAuth);
-
-
-  //redirect
-  if(userInfo?.userFound?.isAdmin){
-    window.location.href = '/admin/dashboard';
-  }else if(userInfo?.userFound){
-    window.location.href = '/'
-  }
+  
+  useEffect(()=>{
+    if(userInfo?.userFound?.isAdmin){
+      window.location.href = '/admin/dashboard';
+    }
+  },[userInfo])
+  
   
   return (
     <>

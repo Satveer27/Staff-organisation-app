@@ -10,6 +10,8 @@ import Dashboard from './pages/admin/Dashboard';
 import AdminRoute from './authRoute/AdminRoute';
 import Staff from './pages/user/Staff';
 import Project from './pages/user/Project';
+import Update from './pages/admin/UpdateUser';
+
 function App() {
   return (
     <>
@@ -25,6 +27,7 @@ function App() {
             <Route path='login' element={<Login/>}/>
             <Route path='register' element={<AdminRoute><Register/></AdminRoute>}/>
             <Route path='dashboard' element={<AdminRoute><Dashboard/></AdminRoute>}/>
+            <Route path='update/:id' element={<AdminRoute><Update/></AdminRoute>}/>
           </Route>
         </Routes>
       </BrowserRouter>

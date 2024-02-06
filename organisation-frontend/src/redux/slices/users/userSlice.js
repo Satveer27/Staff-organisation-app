@@ -76,6 +76,9 @@ export const registerAction = createAsyncThunk('users/register', async(payload, 
             description,
             boolAdmin,
             file,
+            phoneNumber,
+            employeeIdNo,
+            role
             } = payload;
         
         console.log(email,
@@ -102,6 +105,9 @@ export const registerAction = createAsyncThunk('users/register', async(payload, 
         formData.append("isAdmin", boolAdmin);
         formData.append("zone", zonesChecker);
         formData.append("email", email);
+        formData.append("phoneNumber", phoneNumber);
+        formData.append("employeeIdNo", employeeIdNo);
+        formData.append("role", role);
 
         file.forEach((file) => {
             formData.append("file", file);
@@ -121,7 +127,120 @@ export const registerAction = createAsyncThunk('users/register', async(payload, 
 export const getUserZonesAction = createAsyncThunk('users/fetch-zone', async(payload, {rejectWithValue, getState, dispatch})=>{
     try{
         //make http req
+        console.log('yes')
         const response = await axios.get(`${baseURL}/users/zone`);
+        console.log(response.data)
+        return response.data;
+
+    }catch(e){
+        console.log(e)
+        return rejectWithValue(e?.response?.data);
+    }
+})
+
+//register action
+//login action
+export const updateUserAction = createAsyncThunk('users/update', async(payload, {rejectWithValue, getState, dispatch})=>{
+
+    try{
+        const {email,
+            password,
+            username, 
+            zonesChecker,
+            description,
+            boolAdmin,
+            file,
+            phoneNumber,
+            employeeIdNo,
+            id,
+            role
+            } = payload;
+        
+        console.log(email,
+            password,
+            username, 
+            zonesChecker,
+            description,
+            boolAdmin,
+            file,);
+        //token
+        const token = getState()?.users?.userAuth?.userInfo?.token;
+        const config = {
+            headers:{
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
+            }
+        }
+
+        //FormData
+        const formData = new FormData();
+        formData.append("username", username);
+        formData.append("description", description);
+        formData.append("password", password);
+        formData.append("isAdmin", boolAdmin);
+        formData.append("zone", zonesChecker);
+        formData.append("email", email);
+        formData.append("phoneNumber", phoneNumber);
+        formData.append("employeeIdNo", employeeIdNo);
+        formData.append("role", role);
+
+        file.forEach((file) => {
+            formData.append("file", file);
+        });
+
+        
+        //make http req
+        const response = await axios.put(`${baseURL}/users/${id}/updateUsers`, formData, config);
+        return response.data;
+    }catch(e){
+        console.log(e)
+        return rejectWithValue(e?.response?.data);
+    }
+})
+
+//delete user
+export const deleteUserAction = createAsyncThunk('users/deleteUser', async(payload, {rejectWithValue, getState, dispatch})=>{
+    try{
+        const {id} = payload
+        //token
+        const token = getState()?.users?.userAuth?.userInfo?.token;
+        const config = {
+            headers:{
+                Authorization: `Bearer ${token}`,
+                
+            }
+        }
+        //make http req
+        const response = await axios.delete(`${baseURL}/users/${id}/delete`, config);
+        return response.data;
+
+    }catch(e){
+        console.log(e)
+        return rejectWithValue(e?.response?.data);
+    }
+})
+
+//update logout action
+export const logoutAction = createAsyncThunk('users/logout', async(payload, {rejectWithValue, getState, dispatch})=>{
+    localStorage.removeItem('userInfo');
+    return true;  
+})
+
+
+//fetch single user
+export const fetchSingleUser = createAsyncThunk('users/fetch-single', async(payload, {rejectWithValue, getState, dispatch})=>{
+    try{
+        const {id} = payload;
+        console.log(payload)
+        //token
+        const token = getState()?.users?.userAuth?.userInfo?.token;
+        const config = {
+            headers:{
+                Authorization: `Bearer ${token}`,
+            }
+        }
+        //make http req
+        const response = await axios.get(`${baseURL}/users/${id}`,config);
         return response.data;
 
     }catch(e){
@@ -150,6 +269,41 @@ const usersSlice = createSlice({
             state.error = action.payload;
             state.loading = false;
             state.users = null;
+        });
+
+        //fetch single user
+        builder.addCase(fetchSingleUser.pending, (state, action)=>{
+            state.loading = true;
+        });
+        builder.addCase(fetchSingleUser.fulfilled, (state, action)=>{
+            state.user = action.payload;
+            state.loading = false;
+        });
+        builder.addCase(fetchSingleUser.rejected, (state, action)=>{
+            state.error = action.payload;
+            state.loading = false;
+            state.user = null;
+        });
+
+        //delete user
+        builder.addCase(deleteUserAction.pending, (state, action)=>{
+            state.loading = true;
+        });
+        builder.addCase(deleteUserAction.fulfilled, (state, action)=>{
+            state.users = action.payload;
+            state.loading = false;
+            state.isDeleted = true;
+        });
+        builder.addCase(deleteUserAction.rejected, (state, action)=>{
+            state.error = action.payload;
+            state.loading = false;
+            state.users = null;
+            state.isDeleted = false;
+        });
+
+        //logout action
+        builder.addCase(logoutAction.fulfilled, (state, action)=>{
+            state.userAuth.userInfo = null
         });
 
         //fetch users zone
@@ -182,6 +336,23 @@ const usersSlice = createSlice({
             state.isAdded = false;
         });
 
+        //update User
+        builder.addCase(updateUserAction.pending, (state, action)=>{
+            state.loading = true;
+        });
+        builder.addCase(updateUserAction.fulfilled, (state, action)=>{
+            state.user = action.payload;
+            state.loading = false;
+            state.isUpdated = true;
+            state.error = null;
+        });
+        builder.addCase(updateUserAction.rejected, (state, action)=>{
+            state.error = action.payload;
+            state.loading = false;
+            state.user = null;
+            state.isUpdated = false;
+        });
+
         //login
         builder.addCase(loginAction.pending, (state, action)=>{
             state.userAuth.loading = true;
@@ -204,6 +375,8 @@ const usersSlice = createSlice({
         //reset success
         builder.addCase(resetSuccessAction.pending, (state, action)=>{
             state.isAdded = false;
+            state.isUpdated = false;
+            state.isDeleted =false;
         })
 
     } 

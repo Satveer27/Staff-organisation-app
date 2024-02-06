@@ -7,12 +7,20 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import ErrorMsg from '../../errorMessage/ErrorMessage';
 import SuccessMsg from '../../successMessage/successMessage';
-
+import { updateUserAction, fetchSingleUser } from '../../redux/slices/users/userSlice';
+import { useParams } from 'react-router-dom';
 const animatedComponents = makeAnimated();
 
-function Register() {
+function Update() {
   const dispatch = useDispatch();
-  
+  const{id} = useParams();
+
+  useEffect(()=>{
+    console.log(id);
+    dispatch(fetchSingleUser({id}))
+  },[dispatch])
+  const{error, loading, isUpdated,user} = useSelector((state)=>state?.users);
+
   //files
   const[file, setFiles]=useState();
   const[fileError, setFileError] = useState([]);
@@ -42,8 +50,6 @@ function Register() {
   const [zoneOption, setZoneOption] = useState();
   const [adminOption, setAdmin] = useState();
 
-  const{error, loading, isAdded} = useSelector((state)=>state?.users);
-
   const zoneOptionsCoverted = zone?.map(zone=>{
     return{
       value:zone,
@@ -68,13 +74,12 @@ function Register() {
   }
 
   const [formData , setFormData] = useState({
-    username:'',
-    email:'',
-    password:'',
-    description:'',
-    phoneNumber:'',
-    employeeIdNo:'',
-    role:'',
+    username:user?.users?.username,
+    email:user?.users?.email,
+    description:user?.users?.description,
+    phoneNumber:user?.users?.phoneNumber,
+    employeeIdNo:user?.users?.employeeIdNo,
+    role:user?.users?.role,
   })
 
   
@@ -95,22 +100,23 @@ function Register() {
     console.log(boolAdmin);
     console.log(adminOption?.label);
     let zonesChecker = zoneOption?.label
-    dispatch(registerAction({
-      ...formData, file, boolAdmin, zonesChecker,
+    dispatch(updateUserAction({
+      ...formData, file, boolAdmin, zonesChecker, id
     }));
   }
 
   return (
     <>
       {error && <ErrorMsg message={error?.message} />}
+      
       {fileError.length>0 && <ErrorMsg message='file too large or upload an img'/>}
-      {isAdded && <SuccessMsg message="User Added Successfully" />}
+      {isUpdated && <SuccessMsg message="User updated Successfully" />}
       <section>
         <div className='flex items-center justify-center flex-col'>
         <div className='flex flex-row mb-5 mt-10'>
           <UserIcon className='w-14 h-14 mr-3 mt-1'/>
           <h1 className='font-sans font-bold text-6xl'>
-            Register
+            Update User
           </h1>
         </div>
         <h2 className='text-gray-500 font-bold'>Create an account here</h2>
@@ -128,10 +134,6 @@ function Register() {
                   email
           </label>
           <input required type="email" className="placeholder:text-gray-500 w-full mb-4 px-12 py-5 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='email' name="email" value={formData?.email} placeholder='Enter your email' onChange={onChange}/>
-          <label className="block text-sm font-medium text-gray-700">
-                  password
-          </label>
-          <input required type="password" className="placeholder:text-gray-500 w-full mb-4 px-12 py-5 border border-gray-200 focus:ring-blue-300 focus:border-blue-300 rounded-md" id='password' name="password" value={formData?.password} placeholder='Enter your password' onChange={onChange}/>
           <label className="block text-sm font-medium text-gray-700">
                   Employee ID
           </label>
@@ -238,4 +240,4 @@ function Register() {
   )
 }
 
-export default Register
+export default Update;
